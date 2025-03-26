@@ -1,4 +1,4 @@
-# Document Pi (Paperless)
+# Document Pi
 
 [![CI](https://github.com/DudeCalledBro/document-pi/actions/workflows/ci.yml/badge.svg)](https://github.com/DudeCalledBro/document-pi/actions/workflows/ci.yml)
 
