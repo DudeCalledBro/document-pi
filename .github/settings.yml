@@ -1,0 +1,5 @@
+---
+repository:
+  description: >-
+    Ansible playbooks to automate the deployment of Paperless-ngx
+  topics: ansible, automation, docker-compose, paperless-ngx

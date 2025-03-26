@@ -1,0 +1,6 @@
+---
+all:
+  hosts:
+    documents.local:
+      ansible_user: pi
+      ansible_become: true

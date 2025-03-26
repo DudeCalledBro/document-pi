@@ -1,0 +1,58 @@
+---
+paperless_docker_path: /opt/paperless-ngx
+paperless_docker_owner: root
+paperless_docker_group: root
+
+# The ID of the paperless user in the container
+# Paperless will change ownership on its folders to this user
+paperless_docker_usermap_uid: 1000
+
+# The ID of the paperless Group in the container
+# Paperless will change ownership on its folders to this group
+paperless_docker_usernamp_gid: 1000
+
+# Set the paperless container timezone
+paperless_docker_time_zone: Europe/Berlin
+
+# Define the language that paperless will attempt to use when parsing documents
+# https://tesseract-ocr.github.io/tessdoc/Data-Files-in-different-versions.html
+paperless_docker_ocr_language: deu
+
+# Define the paperless instance url
+# This is required if you will be exposing Paperless-ngx on a public domain
+paperless_docker_url: ""
+
+# Define the paperless database settings (DBNAME, DBUSER, DBPASS)
+paperless_docker_postgres_database: paperless
+paperless_docker_postgres_username: paperless
+paperless_docker_postgres_password: paperless
+
+# Define the paperless compose override
+# This override configuration will be merged with the base
+paperless_docker_override:
+  services:
+    webserver:
+      image: ghcr.io/paperless-ngx/paperless-ngx:latest
+      ports:
+        - "8000:8000"
+
+# Mount the paperless media share (defaults to none)
+# This configuration allows Paperless media files on a separate NAS device
+paperless_docker_share_media: {}
+#   src: nas-01.local:/media
+#   opts: rsize=8192,wsize=8192,timeo=14,intr,rw,hard,nfsvers=4
+#   fstype: nfs
+
+# Mount the paperless export share (defaults to none)
+# This configuration allows Paperless export files on a separate NAS device
+paperless_docker_share_export: {}
+#   src: nas-01.local:/export
+#   opts: rsize=8192,wsize=8192,timeo=14,intr,rw,hard,nfsvers=4
+#   fstype: nfs
+
+# Mount the paperless consume share (defaults to none)
+# This configuration allows Paperless consume files on a separate NAS device
+paperless_docker_share_consume: {}
+#   src: nas-01.local:/consume
+#   opts: rsize=8192,wsize=8192,timeo=14,intr,rw,hard,nfsvers=4
+#   fstype: nfs

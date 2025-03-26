@@ -1,0 +1,55 @@
+{{ ansible_managed | comment }}
+---
+services:
+  broker:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ paperless_docker_path }}/redis:/data:rw
+
+  db:
+    image: docker.io/library/postgres:16
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
+    environment:
+      POSTGRES_DB: {{ paperless_docker_postgres_database }}
+      POSTGRES_USER: {{ paperless_docker_postgres_username }}
+      POSTGRES_PASSWORD: {{ paperless_docker_postgres_password }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ paperless_docker_path }}/pgdata:/var/lib/postgresql/data:rw
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
+    depends_on:
+      - db
+      - broker
+    env_file: compose.env
+    environment:
+      PAPERLESS_DBHOST: db
+      PAPERLESS_DBNAME: {{ paperless_docker_postgres_database }}
+      PAPERLESS_DBUSER: {{ paperless_docker_postgres_username }}
+      PAPERLESS_DBPASS: {{ paperless_docker_postgres_password }}
+      PAPERLESS_REDIS: redis://broker:6379
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ paperless_docker_path }}/data:/usr/src/paperless/data:rw
+      - {{ paperless_docker_path }}/media:/usr/src/paperless/media:rw
+      - {{ paperless_docker_path }}/export:/usr/src/paperless/export:rw
+      - {{ paperless_docker_path }}/consume:/usr/src/paperless/consume:rw
